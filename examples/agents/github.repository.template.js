@@ -16,7 +16,7 @@ module.exports = Agent.extend({
     'Pull Requests': '.octicon-git-pull-request ~ .counter'
   },
   slack: {
-    webhookUri: 'https://hooks.slack.com/services/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',
+    webhookUri: 'https://hooks.slack.com/services/mywebhook',
     channel: '#webspy',
     username: 'webspy'
   },
