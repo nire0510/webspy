@@ -1,5 +1,5 @@
 {
-  "name": "WebSpy",
+  "name": "webspy",
   "version": "1.0.0",
   "description": "Get notifications when web page updated",
   "main": "./main.js",
