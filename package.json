@@ -12,8 +12,23 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "node test/kodi.addons.calmradio.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nire0510/webspy"
+  },
+  "keywords": [
+    "scrape",
+    "website",
+    "webpage",
+    "notification",
+    "slack"
+  ],
   "author": "Nir Elbaz <nire0510@gmail.com> (http://nirelbaz.com)",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nire0510/webspy/issues"
+  },
+  "homepage": "https://github.com/nire0510/webspy"
 }
