@@ -1,0 +1,18 @@
+{
+  "data": {
+    "Name": "comix",
+    "Version": "0.2.7",
+    "Daily Downloads": "1",
+    "Weekly Downloads": "36",
+    "Monthly Downloads": "84"
+  },
+  "url": "https://www.npmjs.com/package/comix",
+  "selector": {
+    "Name": "title",
+    "Version": ".last-publisher~li>strong",
+    "Daily Downloads": ".daily-downloads",
+    "Weekly Downloads": ".weekly-downloads",
+    "Monthly Downloads": ".monthly-downloads"
+  },
+  "timestamp": 1471458453601
+}

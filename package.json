@@ -1,0 +1,19 @@
+{
+  "name": "WebSpy",
+  "version": "1.0.0",
+  "description": "Get notifications when web page updated",
+  "main": "./main.js",
+  "dependencies": {
+    "cron": "^1.1.0",
+    "deep-diff": "^0.3.4",
+    "glob": "^7.0.5",
+    "slack-node": "^0.2.0",
+    "x-ray": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test/kodi.addons.calmradio.js"
+  },
+  "author": "Nir Elbaz <nire0510@gmail.com> (http://nirelbaz.com)",
+  "license": "ISC"
+}

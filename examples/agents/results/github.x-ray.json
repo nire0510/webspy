@@ -1,0 +1,19 @@
+{
+  "data": {
+    "Name": "GitHub - lapwinglabs/x-ray: The next web scraper. See through the <html> noise.",
+    "Watchers": 3008,
+    "Forks": 95,
+    "Issues": 80,
+    "Pull Requests": 10
+  },
+  "url": "https://github.com/lapwinglabs/x-ray",
+  "selector": {
+    "Name": "title",
+    "Watchers": ".social-count.js-social-count",
+    "Stars": ".starring-container .social-count.js-social-count",
+    "Forks": ".btn-with-count ~ .social-count",
+    "Issues": ".octicon-issue-opened ~ .counter",
+    "Pull Requests": ".octicon-git-pull-request ~ .counter"
+  },
+  "timestamp": 1471458512974
+}

@@ -1,0 +1,19 @@
+{
+  "data": {
+    "Name": "GitHub - nire0510/qs: Simple query strings parser",
+    "Watchers": 29,
+    "Forks": 3,
+    "Issues": 0,
+    "Pull Requests": 0
+  },
+  "url": "https://github.com/nire0510/qs",
+  "selector": {
+    "Name": "title",
+    "Watchers": ".social-count.js-social-count",
+    "Stars": ".starring-container .social-count.js-social-count",
+    "Forks": ".btn-with-count ~ .social-count",
+    "Issues": ".octicon-issue-opened ~ .counter",
+    "Pull Requests": ".octicon-git-pull-request ~ .counter"
+  },
+  "timestamp": 1471256434229
+}
