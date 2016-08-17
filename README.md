@@ -169,7 +169,7 @@ module.exports = Operator.extend({
   timezone: 'America/Los_Angeles',
   // callback function to execute when the job stops:
   callback: function () {
-    console.log('Done!);
+    console.log('Done!');
   }
 });
 ```
