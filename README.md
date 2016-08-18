@@ -45,14 +45,24 @@ module.exports = Agent.extend({
   // the target url from which data will be scraped:
   url: 'http://my.target-website.com',
   // the data object which defines the selectors of the elements you want to track:
-  selector: {
+  selectors: {
     Name: 'title',
     Field1: '.jquery-selector',
     Field2: '#another .jquery-selector',
     Field3: '.get-data-from@attr',
     MyList: ['ul.tasks li']
   },
-  // slack webhook configuration (read here how to create Slack webhooks - https://api.slack.com/incoming-webhooks)
+  // (Optional) the message text. If empty, WebSpy will automatically generate a message based on the selectors object:
+  text: '',
+  // (Optional) Slack message attachments (see more details here - https://api.slack.com/docs/message-attachments).
+  // You can use the data scraped by wrapping selector name with double curly braces:
+  attachments: [
+    {
+        "footer": "My name is {{Name}}. WebSpy rules!"
+    }
+  ],
+  // (Optional) slack webhook configuration (read here how to create Slack webhooks - https://api.slack.com/incoming-webhooks).
+  // If empty, only the JSON result files will be generated and messages will not be send:
   slack: {
     webhookUri: 'https://hooks.slack.com/services/...',
     channel: '#webspy-channel-name',
@@ -62,8 +72,8 @@ module.exports = Agent.extend({
   // *** OPTIONAL HOOKS *** //
   
   // Occurs before agent begins to scrape data:
-  willScrape(url, selector) {
-    return { url, selector };
+  willScrape(url, selectors) {
+    return { url, selectors };
   },
   // Occurs after agent finishes the scraping:
   didScrape(current) {
@@ -112,9 +122,9 @@ myHook (arg1, arg2) {
 }
 ```
 
-* `willScrape(url, selector)` - Occurs before agent begins to scrape data. Arguments can be modified.  
+* `willScrape(url, selectors)` - Occurs before agent begins to scrape data. Arguments can be modified.  
   - `url` {String} The web page URL from which data will be scraped
-  - `selector` {String} selector The data selector
+  - `selectors` {String} selectors The data selectors object
 
 
 * `didScrape(current)` - Occurs after agent finishes the scraping. Argument can be modified.  

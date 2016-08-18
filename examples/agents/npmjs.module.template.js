@@ -7,7 +7,7 @@ module.exports = Agent.extend({
   // id: '',
   output: path.join(__dirname, 'results'),
   // url: '',
-  selector: {
+  selectors: {
     Name: 'title',
     Version: '.last-publisher~li>strong',
     'Daily Downloads': '.daily-downloads',

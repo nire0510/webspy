@@ -7,7 +7,7 @@ module.exports = Agent.extend({
   // id: '',
   output: path.join(__dirname, 'results'),
   // url: '',
-  selector: {
+  selectors: {
     Name: 'title',
     Watchers: '.social-count.js-social-count',
     Stars: '.starring-container .social-count.js-social-count',

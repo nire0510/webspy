@@ -8,7 +8,7 @@ var x = require('x-ray')();
 
 /**
  * WebSpy Agent Class
- * @type {{notifier: *, extend: ((literal:Object)=>Object), _isOutputDirectoryExists: ((directory:string, current:Object)=>Promise), _isFileExists: ((file:String)=>Promise), _getLastResults: ((file:String, exists:Boolean)=>Promise), willScrape: ((url:String, selector:String)), _scrape: ((overrides:Object)=>Promise), didScrape: ((current:Object)), willCompare: ((previous:Object, current:Object)), _compare: ((overrides:Object)), didCompare: ((comparison:Object)), _preWillNotify: ((comparison:Object)), willNotify: ((slack:Object, comparison:Object)), _notify: ((overrides:Object)=>Promise), didNotify: ((status:Object)), willSave: ((file:Object, current:Object)), _save: ((file?, overrides:Object)=>Promise), didSave: ((file:String)), run: (())}}
+ * @type {{notifier: *, extend: ((literal:Object)=>Object), _isOutputDirectoryExists: ((directory:string, current:Object)=>Promise), _isFileExists: ((file:String)=>Promise), _getLastResults: ((file:String, exists:Boolean)=>Promise), willScrape: ((url:String, selectors:String)), _scrape: ((overrides:Object)=>Promise), didScrape: ((current:Object)), willCompare: ((previous:Object, current:Object)), _compare: ((overrides:Object)), didCompare: ((comparison:Object)), _preWillNotify: ((comparison:Object)), willNotify: ((slack:Object, comparison:Object)), _notify: ((overrides:Object)=>Promise), didNotify: ((status:Object)), willSave: ((file:Object, current:Object)), _save: ((file?, overrides:Object)=>Promise), didSave: ((file:String)), run: (())}}
  */
 var Agent = {
   /**
@@ -109,9 +109,9 @@ var Agent = {
    * Hook: Occurs before agent begins the scraping. User can modify arguments.
    * In this case, method should return the arguments in an object (i.e. { url, selector })
    * @param {String} url The web page URL from which data will be scraped
-   * @param {String} selector The data selector
+   * @param {Object} selectors The data selectors object
    */
-  willScrape(url, selector) {
+  willScrape(url, selectors) {
     // console.log('willScrape', arguments);
   },
 
@@ -125,7 +125,7 @@ var Agent = {
     // console.log('scrape', arguments);
 
     // override values sent from willScrape by the user:
-    ['url', 'selector'].forEach((prop) => {
+    ['url', 'selectors'].forEach((prop) => {
       if (overrides && overrides.hasOwnProperty(prop)) {
         this[prop] = overrides[prop];
       }
@@ -133,7 +133,7 @@ var Agent = {
 
     console.log(`Scraping data from ${this.url}...`);
     return new Promise((resolve, reject) => {
-      x(this.url, this.selector)((err, output) => {
+      x(this.url, this.selectors)((err, output) => {
         if (err) {
           return reject(err);
         }
@@ -141,7 +141,7 @@ var Agent = {
         let results = {};
         results.data = output;
         results.url = this.url;
-        results.selector = this.selector;
+        results.selectors = this.selectors;
         results.timestamp = new Date().valueOf();
         this.current = results;
 
@@ -237,26 +237,38 @@ var Agent = {
       }
     });
 
+    // slack configuration exists:
     if (this.slack && this.slack.webhookUri && this.slack.channel && this.slack.username) {
+      // data has changed:
       if (this.comparison && this.comparison.length > 0) {
-        var message = `*${this.id.toUpperCase()}* AGENT RESULTS\n`;
+        var message;
 
-        console.log(`Sending notification...`);
+        // message text provided by user:
+        if (this.text) {
+          message = this.text.replace(/{{\s*([\w\.]+)\s*}}/g, (found, field) => {
+            return this.current.data[field];
+          });
+        }
+        else {
+          var message = `*${this.id.toUpperCase()}* AGENT RESULTS\n`;
 
-        this.comparison.forEach((item) => {
-          switch (item.kind) {
-            case 'N':
-              message += `• ${item.path ? item.path.join('-') : ''}: *${item.rhs}* _(new)_\n`;
-              break;
-            case 'D':
-              message += `• ${item.path ? item.path.join('-') : ''} _removed_\n`;
-              break;
-            case 'E':
-              message += `• ${item.path ? item.path.join('-') : ''}: *${item.rhs}* _(updated)_\n`;
-              break;
-          }
-        });
-        message += '\n';
+          console.log(`Sending notification...`);
+
+          this.comparison.forEach((item) => {
+            switch (item.kind) {
+              case 'N':
+                message += `• ${item.path ? item.path.join('-') : ''}: *${item.rhs}* _(new)_\n`;
+                break;
+              case 'D':
+                message += `• ${item.path ? item.path.join('-') : ''} _removed_\n`;
+                break;
+              case 'E':
+                message += `• ${item.path ? item.path.join('-') : ''}: *${item.rhs}* _(updated)_\n`;
+                break;
+            }
+          });
+          message += '\n';
+        }
 
         Agent.notifier.setWebhook(this.slack.webhookUri);
         return new Promise((resolve, reject) => {
@@ -353,7 +365,7 @@ var Agent = {
     let file = path.join(this.output, `${this.id}.json`);
 
     Promise.resolve()
-      .then(this.willScrape && this.willScrape.bind(this, this.url, this.selector))
+      .then(this.willScrape && this.willScrape.bind(this, this.url, this.selectors))
       .then(Agent._scrape.bind(this))
       .then(this.didScrape && this.didScrape.bind(this))
       .then(Agent._isOutputDirectoryExists.bind(this, this.output))
