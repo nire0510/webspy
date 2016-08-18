@@ -252,7 +252,7 @@ var Agent = {
               message += `• ${item.path ? item.path.join('-') : ''} _removed_\n`;
               break;
             case 'E':
-              message += `• ${item.path ? item.path.join('-') : ''}: *${item.lhs}* >> *${item.rhs}* _(updated)_\n`;
+              message += `• ${item.path ? item.path.join('-') : ''}: *${item.rhs}* _(updated)_\n`;
               break;
           }
         });
@@ -260,11 +260,17 @@ var Agent = {
 
         Agent.notifier.setWebhook(this.slack.webhookUri);
         return new Promise((resolve, reject) => {
-          Agent.notifier.webhook({
+          var options = {
             channel: this.slack.channel,
             username: this.slack.username,
             text: message
-          }, function (err, response) {
+          };
+
+          if (this.attachments) {
+            options.attachments = this.attachments;
+          }
+
+          Agent.notifier.webhook(options, function (err, response) {
             if (err) {
               return reject(err);
             }

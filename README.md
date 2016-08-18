@@ -21,7 +21,8 @@ to keep an eye and let you know if someone messed with web pages you care for...
 `npm install webspy`
 1. Create as many WebSpy Agent files as you wish, one per URL (read more about agent later)
 1. (Optional) - Create WebSpy Operator for managing your agents
-1. Run the agent file directly or use the operator (same as you do with any other node file)
+1. Run the agent file directly or use the operator (same as you do with any other node file):  
+`node ./agents/agent-1.js`
 
 ## WebSpy Components
 
@@ -51,7 +52,7 @@ module.exports = Agent.extend({
     Field3: '.get-data-from@attr',
     MyList: ['ul.tasks li']
   },
-  // slack webhook configuration ([read here how to create Slack webhooks](https://api.slack.com/incoming-webhooks))
+  // slack webhook configuration (read here how to create Slack webhooks - https://api.slack.com/incoming-webhooks)
   slack: {
     webhookUri: 'https://hooks.slack.com/services/...',
     channel: '#webspy-channel-name',
@@ -114,30 +115,38 @@ myHook (arg1, arg2) {
 * `willScrape(url, selector)` - Occurs before agent begins to scrape data. Arguments can be modified.  
   - `url` {String} The web page URL from which data will be scraped
   - `selector` {String} selector The data selector
-  
+
+
 * `didScrape(current)` - Occurs after agent finishes the scraping. Argument can be modified.  
     - `current` {Object} Current execution results
-    
+
+
 * `willCompare(previous, current)` - Occurs before agent begins to compare execution results. Arguments can be modified.  
     - `previous` {Object} Previous execution results
     - `current` {Object} Current execution results
-    
+
+
 * `didCompare(comparison)` - Occurs after agent finishes the comparison. Argument can be modified.  
     - `comparison` {Object} Comparison results
-    
+
+
 * `willNotify(slack, comparison)` - Occurs before agent sends comparison results. Arguments can be modified.  
     - `slack` {Object} Slack instance configuration
     - `comparison` {Object} Comparison results
-    
+
+
 * `didNotify(status)` - Occurs after agent sends comparison results.  
     - `status` {Object} Slack sending status
-    
+
+
 * `willSave(file, current)` - Occurs before agent saves current execution results to a file. Arguments can be modified.  
     - `file` {String} Execution results file path
     - `current` {Object} Current execution results
-    
+
+
 * `didSave(file)` - Occurs after agent saves current execution results to a file.  
     - `file` {String} Execution results file path
+
 
 #### Running an Agent
 Running an agent is as simple as running any other node module:  
@@ -158,14 +167,14 @@ var Operator = require('webspy').Operator;
 
 module.exports = Operator.extend({
   // when or on what time basis you wish your agent(s) to run 
-  (based on [CRON](http://crontab.org/) syntax):
+  (based on CRON syntax - http://crontab.org/):
   schedule: '30 * * * * *',
   // directory path where agent file is saved. the operator will run
   // every file on directory which matches the pattern:
   path: '/path/to/agent/files/*.js'
   // should operator run immediately without waiting for the next occurence? 
   pronto: true,
-  // scheduler timezone:
+  // scheduler timezone (check this link for a list of valid timezones - https://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/timezone.html):
   timezone: 'America/Los_Angeles',
   // callback function to execute when the job stops:
   callback: function () {
@@ -173,3 +182,50 @@ module.exports = Operator.extend({
   }
 });
 ```
+
+#### CRON Syntax
+When specifying your cron values you'll need to make sure that your values fall within the ranges. For instance, some cron's use a 0-7 range for the day of week where both 0 and 7 represent Sunday. We do not:
+* **Units**
+    * Seconds: 0-59
+    * Minutes: 0-59
+    * Hours: 0-23
+    * Day of Month: 1-31
+    * Months: 0-11
+    * Day of Week: 0-6
+
+* **Patterns**
+    * `*` - any
+    * `1-4,7` - range
+    * `*/2` - steps
+    
+#### Examples
+* `* * * * * *` - run every second
+* `30 * * * * *` - run every 30 seconds
+* `0 */5 * * * *` - run every 5 minutes
+* `0 0 1 * * 1-5` - run every hour only on working days
+* `0 30 14 1 6 *` - run on July 1st, 14:30 (month is 0 based index)
+
+#### Glob Syntax Examples (for path definition)
+* `*` Matches 0 or more characters in a single path portion
+* `?` Matches 1 character
+* `[...]` Matches a range of characters, similar to a RegExp range. If the first character of the range is ! or ^ then it matches any character not in the range.
+* `!(pattern|pattern|pattern)` Matches anything that does not match any of the patterns provided.
+* `?(pattern|pattern|pattern)` Matches zero or one occurrence of the patterns provided.
+* `+(pattern|pattern|pattern)` Matches one or more occurrences of the patterns provided.
+* `*(a|b|c)` Matches zero or more occurrences of the patterns provided
+* `@(pattern|pat*|pat?erN)` Matches exactly one of the patterns provided
+* `**` If a "globstar" is alone in a path portion, then it matches zero or more directories and subdirectories searching for matches. It does not crawl symlinked directories.
+
+## Tips
+* WebSpy shines as a productivity tool when it runs constantly. If you have your own
+server, you might want to try [PM2](http://pm2.keymetrics.io/) as your operators process manager.
+Otherwise, there are some really cool free hosting services, such as [OpenShift](https://www.openshift.com/), 
+[Heroku](https://dashboard.heroku.com/) and more.
+
+## Useful Links
+* [Slack Webhooks](https://api.slack.com/incoming-webhooks)
+* [CRON syntax](http://crontab.org/)
+* [Valid timezones](ttps://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/timezone.html)
+* Free node.js hosting services:
+    * [OpenShift](https://www.openshift.com/)
+    * [Heroku](https://dashboard.heroku.com/)
