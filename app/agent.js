@@ -270,6 +270,17 @@ var Agent = {
           message += '\n';
         }
 
+        if (this.attachments) {
+          // replace place holders:
+          this.attachments.forEach((attachment) => {
+            Object.keys(attachment).forEach((key) => {
+              attachment[key] = attachment[key].replace(/{{\s*([\w\.]+)\s*}}/g, (found, field) => {
+                return this.current.data[field];
+              });
+            });
+          });
+        }
+
         Agent.notifier.setWebhook(this.slack.webhookUri);
         return new Promise((resolve, reject) => {
           var options = {
