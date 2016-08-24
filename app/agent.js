@@ -291,9 +291,20 @@ var Agent = {
           // replace place holders:
           this.attachments.forEach((attachment) => {
             Object.keys(attachment).forEach((key) => {
-              attachment[key] = attachment[key].replace(/{{\s*([\w\.-_@#]+)\s*}}/g, (found, field) => {
-                return this.current.data[field];
-              });
+              if (Array.isArray(attachment[key])) {
+                attachment[key].forEach((field) => {
+                  Object.keys(field).forEach((key) => {
+                    field[key] = field[key].replace(/{{\s*([\w\.-_@#]+)\s*}}/g, (found, field) => {
+                      return this.current.data[field];
+                    });
+                  });
+                });
+              }
+              else {
+                attachment[key] = attachment[key].replace(/{{\s*([\w\.-_@#]+)\s*}}/g, (found, field) => {
+                  return this.current.data[field];
+                });
+              }
             });
           });
         }
