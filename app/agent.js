@@ -4,7 +4,9 @@ var diff = require('deep-diff').diff;
 var fs = require('fs');
 var path = require('path');
 var Slack = require('slack-node');
-var x = require('x-ray')();
+var phantom = require('x-ray-phantom');
+var xr = require('x-ray')();
+var xp = require('x-ray')().driver(phantom({webSecurity:false}));
 
 /**
  * WebSpy Agent Class
@@ -133,19 +135,34 @@ var Agent = {
 
     console.log(`Scraping data from ${this.url}...`);
     return new Promise((resolve, reject) => {
+      let wait = this.wait && this.wait > 0,
+        x = wait > 0 ? xp : xr;
+
       x(this.url, this.selectors)((err, output) => {
         if (err) {
-          return reject(err);
+          return reject(wait ? done(err) : err);
         }
 
-        let results = {};
-        results.data = output;
-        results.url = this.url;
-        results.selectors = this.selectors;
-        results.timestamp = new Date().valueOf();
-        this.current = results;
+        if (wait) {
+          setTimeout(() => {
+            _resolve.call(this);
+          }, this.wait);
+        }
+        else {
+          _resolve.call(this);
+        }
 
-        resolve(results);
+        function _resolve () {
+          let results = {};
+
+          results.data = output;
+          results.url = this.url;
+          results.selectors = this.selectors;
+          results.timestamp = new Date().valueOf();
+          this.current = results;
+
+          resolve(results);
+        }
       });
     });
   },

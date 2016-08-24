@@ -1,6 +1,6 @@
 {
   "name": "webspy",
-  "version": "1.1.2",
+  "version": "1.1.5",
   "description": "Get notifications when web page updated",
   "main": "./main.js",
   "dependencies": {
@@ -8,7 +8,8 @@
     "deep-diff": "^0.3.4",
     "glob": "^7.0.5",
     "slack-node": "^0.2.0",
-    "x-ray": "^2.3.0"
+    "x-ray": "^2.3.0",
+    "x-ray-phantom": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {

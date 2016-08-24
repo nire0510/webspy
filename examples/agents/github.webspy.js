@@ -11,4 +11,5 @@ agent.attachments = [
   }
 ];
 agent.text = "the github repo name is {{Name}} and is watched by {{Watchers}} users";
+agent.wait = 5000;
 agent.run();

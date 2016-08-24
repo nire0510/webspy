@@ -16,6 +16,7 @@ to keep an eye and let you know if someone messed with web pages you care for...
 |   |-- agent-2.js
 |   |-- ...
 |-- operator.js
+|-- operator-a.js
 ```
 1. Install **WebSpy** node package:  
 `npm install webspy`
@@ -61,6 +62,8 @@ module.exports = Agent.extend({
         "footer": "My name is {{Name}}. WebSpy rules!"
     }
   ],
+  // (Optional) time to wait (in milliseconds) before scraping the page. Can be handy when scraping dynamic page (AJAX)
+  wait: 0,
   // (Optional) slack webhook configuration (read here how to create Slack webhooks - https://api.slack.com/incoming-webhooks).
   // If empty, only the JSON result files will be generated and messages will not be send:
   slack: {
@@ -167,6 +170,9 @@ features, such as agent scheduler (keep reading).
 ### Operator
 WebSpy Operator is an optional component, which basically runs the agents for you on 
 specific date and time or even on a recurring basis.  
+Notice you can add multiple operators in the same file, just clone the operator variable
+and extend it, too. This becomes handy when you want to to run your agents on
+different schedules.
 
 #### Agent Sample File
 
