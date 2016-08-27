@@ -294,14 +294,14 @@ var Agent = {
               if (Array.isArray(attachment[key])) {
                 attachment[key].forEach((field) => {
                   Object.keys(field).forEach((key) => {
-                    field[key] = field[key].replace(/{{\s*([\w\.-_@#]+)\s*}}/g, (found, field) => {
+                    field[key] = field[key].replace(/{{\s*([\w\.\-_@#]+)\s*}}/g, (found, field) => {
                       return this.current.data[field];
                     });
                   });
                 });
               }
               else {
-                attachment[key] = attachment[key].replace(/{{\s*([\w\.-_@#]+)\s*}}/g, (found, field) => {
+                attachment[key] = attachment[key].replace(/{{\s*([\w\.\-_@#]+)\s*}}/g, (found, field) => {
                   return this.current.data[field];
                 });
               }
