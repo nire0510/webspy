@@ -262,7 +262,7 @@ var Agent = {
 
         // message text provided by user:
         if (this.text) {
-          message = this.text.replace(/{{\s*([\w\.-_@#]+)\s*}}/g, (found, field) => {
+          message = this.text.replace(/{{\s*([\w\.\-_@#]+)\s*}}/g, (found, field) => {
             return this.current.data[field];
           });
         }
