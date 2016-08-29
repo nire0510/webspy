@@ -203,6 +203,7 @@ var Agent = {
 
     console.log(`Comparing current data with previous, if exist...`);
     this.comparison = diff(this.previous && this.previous.data || {}, this.current.data);
+    return this.comparison;
   },
 
   /**
@@ -226,6 +227,8 @@ var Agent = {
     if (comparison) {
       this.comparison = comparison;
     }
+
+    return this.comparison
   },
 
   /**
@@ -414,13 +417,9 @@ var Agent = {
         this.willCompare && this.willCompare.call(this, previous, this.current);
       })
       .then(Agent._compare.bind(this))
-      .then(() => {
-        this.didCompare && this.didCompare.call(this, this.comparison);
-      })
+      .then(this.didCompare && this.didCompare.bind(this))
       .then(Agent._preWillNotify.bind(this))
-      .then(() => {
-        this.willNotify && this.willNotify.bind(this, this.slack, this.comparison);
-      })
+      .then(this.willNotify && this.willNotify.bind(this, this.slack))
       .then(Agent._notify.bind(this))
       .then(this.didNotify && this.didNotify.bind(this))
       .then(() => {
