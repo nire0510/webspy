@@ -418,7 +418,9 @@ var Agent = {
         this.didCompare && this.didCompare.call(this, this.comparison);
       })
       .then(Agent._preWillNotify.bind(this))
-      .then(this.willNotify && this.willNotify.bind(this, this.slack, this.comparison))
+      .then(() => {
+        this.willNotify && this.willNotify.bind(this, this.slack, this.comparison);
+      })
       .then(Agent._notify.bind(this))
       .then(this.didNotify && this.didNotify.bind(this))
       .then(() => {
