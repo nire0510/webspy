@@ -19,7 +19,7 @@ to keep an eye and let you know if someone messed with web pages you care for...
 |-- operator-a.js
 ```
 1. Install **WebSpy** node package:  
-`npm install webspy`
+`npm install webspy --save`
 1. Create as many WebSpy Agent files as you wish, one per URL (read more about agent later)
 1. (Optional) - Create WebSpy Operator for managing your agents
 1. Run the agent file directly or use the operator (same as you do with any other node file):  

@@ -2,5 +2,6 @@ var Operator = require('../../main').Operator;
 
 Operator.extend({
   schedule: '30 * * * * *',
-  path: '/path/to/agent/files/*.js'
+  path: '/path/to/agent/files/*.js',
+  pronto: true
 }).run();

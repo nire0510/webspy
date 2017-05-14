@@ -1,7 +1,7 @@
 'use strict';
 
-var Agent = require('./app/agent');
-var Operator = require('./app/operator');
+const Agent = require('./app/agent');
+const Operator = require('./app/operator');
 
 module.exports = {
   Agent: Agent,

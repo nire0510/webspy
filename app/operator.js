@@ -39,7 +39,7 @@ module.exports = {
    * @returns {Object}
    */
   extend(literal) {
-    var result = Object.create(this);
+    let result = Object.create(this);
 
     Object.keys(literal).forEach(function(key) {
       result[key] = literal[key];

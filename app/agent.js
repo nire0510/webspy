@@ -1,18 +1,18 @@
 'use strict';
 
-var diff = require('deep-diff').diff;
-var fs = require('fs');
-var path = require('path');
-var Slack = require('slack-node');
-var phantom = require('x-ray-phantom');
-var xr = require('x-ray')();
-var xp = require('x-ray')().driver(phantom({webSecurity:false}));
+const diff = require('deep-diff').diff;
+const fs = require('fs');
+const path = require('path');
+const Slack = require('slack-node');
+const phantom = require('x-ray-phantom');
+const xr = require('x-ray')();
+const xp = require('x-ray')().driver(phantom({webSecurity:false}));
 
 /**
  * WebSpy Agent Class
  * @type {{notifier: *, extend: ((literal:Object)=>Object), _isOutputDirectoryExists: ((directory:string, current:Object)=>Promise), _isFileExists: ((file:String)=>Promise), _getLastResults: ((file:String, exists:Boolean)=>Promise), willScrape: ((url:String, selectors:String)), _scrape: ((overrides:Object)=>Promise), didScrape: ((current:Object)), willCompare: ((previous:Object, current:Object)), _compare: ((overrides:Object)), didCompare: ((comparison:Object)), _preWillNotify: ((comparison:Object)), willNotify: ((slack:Object, comparison:Object)), _notify: ((overrides:Object)=>Promise), didNotify: ((status:Object)), willSave: ((file:Object, current:Object)), _save: ((file?, overrides:Object)=>Promise), didSave: ((file:String)), run: (())}}
  */
-var Agent = {
+const Agent = {
   /**
    * Slack instance
    * @property
@@ -25,7 +25,7 @@ var Agent = {
    * @returns {Object}
    */
   extend(literal) {
-    var result = Object.create(this);
+    let result = Object.create(this);
 
     Object.keys(literal).forEach(function(key) {
       result[key] = literal[key];
@@ -261,7 +261,7 @@ var Agent = {
     if (this.slack && this.slack.webhookUri && this.slack.channel && this.slack.username) {
       // data has changed:
       if (this.comparison && this.comparison.length > 0) {
-        var message;
+        let message;
 
         // message text provided by user:
         if (this.text) {
@@ -270,7 +270,7 @@ var Agent = {
           });
         }
         else {
-          var message = `*${this.id.toUpperCase()}* AGENT RESULTS\n`;
+          message = `*${this.id.toUpperCase()}* AGENT RESULTS\n`;
 
           console.log(`Sending notification...`);
 
@@ -314,7 +314,7 @@ var Agent = {
 
         Agent.notifier.setWebhook(this.slack.webhookUri);
         return new Promise((resolve, reject) => {
-          var options = {
+          letoptions = {
             channel: this.slack.channel,
             username: this.slack.username,
             text: message
