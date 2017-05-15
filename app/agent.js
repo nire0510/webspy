@@ -314,7 +314,7 @@ const Agent = {
 
         Agent.notifier.setWebhook(this.slack.webhookUri);
         return new Promise((resolve, reject) => {
-          letoptions = {
+          let options = {
             channel: this.slack.channel,
             username: this.slack.username,
             text: message
