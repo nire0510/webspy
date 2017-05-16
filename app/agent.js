@@ -339,7 +339,7 @@ const Agent = {
       }
     }
     else {
-      console.log(`Slack configuration is missing. Quiting...`);
+      console.log(`Slack configuration is missing or is deativated. Quiting...`);
     }
   },
 
