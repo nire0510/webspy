@@ -1,6 +1,6 @@
 'use strict';
 
-var agent = require('./github.repository.template.js');
+const agent = require('./github.repository.template.js');
 
 agent.id = 'github.webspy';
 agent.url = 'https://github.com/nire0510/webspy';

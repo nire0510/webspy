@@ -67,6 +67,7 @@ module.exports = Agent.extend({
   // (Optional) slack webhook configuration (read here how to create Slack webhooks - https://api.slack.com/incoming-webhooks).
   // If empty, only the JSON result files will be generated and messages will not be send:
   slack: {
+    active: true,
     webhookUri: 'https://hooks.slack.com/services/...',
     channel: '#webspy-channel-name',
     username: 'webhook-username'

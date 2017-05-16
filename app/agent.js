@@ -6,7 +6,7 @@ const path = require('path');
 const Slack = require('slack-node');
 const phantom = require('x-ray-phantom');
 const xr = require('x-ray')();
-const xp = require('x-ray')().driver(phantom({webSecurity:false}));
+const xp = require('x-ray')().driver(phantom({ webSecurity: false }));
 
 /**
  * WebSpy Agent Class
@@ -109,7 +109,7 @@ const Agent = {
 
   /**
    * Hook: Occurs before agent begins the scraping. User can modify arguments.
-   * In this case, method should return the arguments in an object (i.e. { url, selector })
+   * In this case, method should return the arguments as an object (i.e. { url, selector })
    * @param {String} url The web page URL from which data will be scraped
    * @param {Object} selectors The data selectors object
    */
@@ -135,7 +135,8 @@ const Agent = {
 
     console.log(`Scraping data from ${this.url}...`);
     return new Promise((resolve, reject) => {
-      let wait = this.wait && this.wait > 0,
+      let self = this,
+        wait = this.wait && this.wait > 0,
         x = wait > 0 ? xp : xr;
 
       x(this.url, this.selectors)((err, output) => {
@@ -156,8 +157,8 @@ const Agent = {
           let results = {};
 
           results.data = output;
-          results.url = this.url;
-          results.selectors = this.selectors;
+          results.url = self.url;
+          results.selectors = self.selectors;
           results.timestamp = new Date().valueOf();
           this.current = results;
 
@@ -178,7 +179,7 @@ const Agent = {
 
   /**
    * Hook: Occurs before agent begins to compare execution results. User can modify arguments.
-   * In this case, method should return the arguments in an object (i.e. { previous, current })
+   * In this case, method should return the arguments as an object (i.e. { previous, current })
    * @param {Object} previous Previous execution results
    * @param {Object} current Current execution results
    */
@@ -233,7 +234,7 @@ const Agent = {
 
   /**
    * Hook: Occurs before agent sends comparison results. User can modify arguments.
-   * In this case, method should return the arguments in an object (i.e. { slack, comparison })
+   * In this case, method should return the arguments as an object (i.e. { slack, comparison })
    * @param {Object} slack Slack instance configuration
    * @param {Object} comparison Current execution resultsComparison results
    */
@@ -258,7 +259,7 @@ const Agent = {
     });
 
     // slack configuration exists:
-    if (this.slack && this.slack.webhookUri && this.slack.channel && this.slack.username) {
+    if (this.slack && this.slack.webhookUri && this.slack.channel && this.slack.username && this.slack.active !== false) {
       // data has changed:
       if (this.comparison && this.comparison.length > 0) {
         let message;
@@ -352,7 +353,7 @@ const Agent = {
 
   /**
    * Hook: Occurs before agent saves current execution results to file. User can modify arguments.
-   * In this case, method should return the arguments in an object (i.e. { file, current })
+   * In this case, method should return the arguments as an object (i.e. { file, current })
    * @param {string} file Execution results file path
    * @param {Object} current Current execution results
    */

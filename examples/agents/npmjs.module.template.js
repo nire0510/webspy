@@ -1,6 +1,6 @@
 'use strict';
 
-var path = require('path');
+const path = require('path');
 var Agent = require('../../main').Agent;
 
 module.exports = Agent.extend({
