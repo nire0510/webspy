@@ -3,3 +3,4 @@ node_modules
 .idea
 /examples/agents/results
 examples/agents/news.ynet.js
+npm-debug.log
