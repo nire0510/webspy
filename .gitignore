@@ -4,3 +4,4 @@ node_modules
 /examples/agents/results
 examples/agents/news.ynet.js
 npm-debug.log
+examples/agents/setai-hotel.js

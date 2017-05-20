@@ -2,9 +2,10 @@
 
 const diff = require('deep-diff').diff;
 const fs = require('fs');
+const Mustache = require('mustache');
 const path = require('path');
-const Slack = require('slack-node');
 const phantom = require('x-ray-phantom');
+const Slack = require('slack-node');
 const xr = require('x-ray')();
 const xp = require('x-ray')().driver(phantom({ webSecurity: false }));
 
@@ -266,9 +267,7 @@ const Agent = {
 
         // message text provided by user:
         if (this.text) {
-          message = this.text.replace(/{{\s*([\w\.\-_@#]+)\s*}}/g, (found, field) => {
-            return this.current.data[field];
-          });
+          message = Mustache.render(this.text, this.current.data);
         }
         else {
           message = `*${this.id.toUpperCase()}* AGENT RESULTS\n`;
@@ -298,16 +297,12 @@ const Agent = {
               if (Array.isArray(attachment[key])) {
                 attachment[key].forEach((field) => {
                   Object.keys(field).forEach((key) => {
-                    field[key] = field[key].replace(/{{\s*([\w\.\-_@#]+)\s*}}/g, (found, field) => {
-                      return this.current.data[field];
-                    });
+                    field[key] = Mustache.render(this.text, this.current.data);
                   });
                 });
               }
               else {
-                attachment[key] = attachment[key].replace(/{{\s*([\w\.\-_@#]+)\s*}}/g, (found, field) => {
-                  return this.current.data[field];
-                });
+                attachment[key] = Mustache.render(this.text, this.current.data);
               }
             });
           });

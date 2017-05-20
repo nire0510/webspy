@@ -53,10 +53,11 @@ module.exports = Agent.extend({
     Field3: '.get-data-from@attr',
     MyList: ['ul.tasks li']
   },
-  // (Optional) the message text. If empty, WebSpy will automatically generate a message based on the selectors object:
+  // (Optional) the message text. If empty, WebSpy will automatically generate a message based on the selectors object based on Mustache templates engine.
+  // (read more about the templates engine here)[https://www.npmjs.com/package/mustache]:
   text: '',
   // (Optional) Slack message attachments (see more details here - https://api.slack.com/docs/message-attachments).
-  // You can use the data scraped by wrapping selector name with double curly braces:
+  // similar to the text property, the attachments' template is based on Mustache templates engine:
   attachments: [
     {
         "footer": "My name is {{Name}}. WebSpy rules!"
@@ -240,6 +241,7 @@ Otherwise, there are some really cool free hosting services, such as [OpenShift]
 [Heroku](https://dashboard.heroku.com/) and more.
 
 ## Useful Links
+* [Mustache](https://www.npmjs.com/package/mustache)
 * [Slack Webhooks](https://api.slack.com/incoming-webhooks)
 * [CRON syntax](http://crontab.org/)
 * [Valid timezones](ttps://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/timezone.html)
