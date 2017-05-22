@@ -149,11 +149,9 @@ const Agent = {
           url: this.url,
           json: true
         }, (err, response, body) => {
-          if (err) {
+          if (err || response.statusCode >= 400) {
             return reject(err);
           }
-
-          debugger
 
           if (response.statusCode === 200) {
             Object.keys(this.selectors).forEach(key => {
@@ -323,37 +321,18 @@ const Agent = {
               if (Array.isArray(attachment[key])) {
                 attachment[key].forEach((field) => {
                   Object.keys(field).forEach((key) => {
-                    field[key] = Mustache.render(this.text, this.current.data);
+                    field[key] = Mustache.render(field[key], this.current.data);
                   });
                 });
               }
               else {
-                attachment[key] = Mustache.render(this.text, this.current.data);
+                attachment[key] = Mustache.render(attachment[key], this.current.data);
               }
             });
           });
         }
 
-        Agent.notifier.setWebhook(this.slack.webhookUri);
-        return new Promise((resolve, reject) => {
-          let options = {
-            channel: this.slack.channel,
-            username: this.slack.username,
-            text: message
-          };
-
-          if (this.attachments) {
-            options.attachments = this.attachments;
-          }
-
-          Agent.notifier.webhook(options, function (err, response) {
-            if (err) {
-              return reject(err);
-            }
-
-            resolve(response);
-          });
-        });
+        return Agent._sendSlack.call(this, message, this.attachments);
       }
       else {
         console.log(`Nothing has changed. Quiting...`);
@@ -362,6 +341,29 @@ const Agent = {
     else {
       console.log(`Slack configuration is missing or is deativated. Quiting...`);
     }
+  },
+
+  _sendSlack(text, attachments) {
+    Agent.notifier.setWebhook(this.slack.webhookUri);
+    return new Promise((resolve, reject) => {
+      let options = {
+        channel: this.slack.channel,
+        username: this.slack.username,
+        text
+      };
+
+      if (attachments) {
+        options.attachments = attachments;
+      }
+
+      Agent.notifier.webhook(options, function (err, response) {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(response);
+      });
+    });
   },
 
   /**
@@ -449,8 +451,19 @@ const Agent = {
       })
       .then(Agent._save.bind(this, file))
       .then(this.didSave && this.didSave.bind(this, file))
-      .catch(function (err) {
-        console.error(err);
+      .catch(err => {
+        Agent._sendSlack.call(this, null, [
+          {
+            fallback: `An error has occurred on agent ${this.id}`,
+            color: '#b71c1c',
+            author_name: 'WebSpy Agent',
+            pretext: `An error has occurred`,
+            title: this.id,
+            text: JSON.stringify(err),
+            ts: new Date().valueOf()
+          }
+        ]);
+        console.log(err);
       });
   }
 };
