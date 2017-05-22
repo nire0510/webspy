@@ -45,13 +45,18 @@ module.exports = Agent.extend({
   output: '/path/to/results/files/directory',
   // the target url from which data will be scraped:
   url: 'http://my.target-website.com',
-  // the data object which defines the selectors of the elements you want to track:
+  // indicates whether url output is a JSON file:
+  json: false,
+  // the data object which defines the selectors of the elements you want to track.
+  // notice that there's a different syntax in case of querying a JSON file (read more about how to write selectors in case your output is JSON)[https://www.npmjs.com/package/json-query]
+  // and you should refer the main object as `root`:
   selectors: {
     Name: 'title',
     Field1: '.jquery-selector',
     Field2: '#another .jquery-selector',
     Field3: '.get-data-from@attr',
-    MyList: ['ul.tasks li']
+    MyList: ['ul.tasks li'],
+    MyJSON: 'data.attr'
   },
   // (Optional) the message text. If empty, WebSpy will automatically generate a message based on the selectors object based on Mustache templates engine.
   // (read more about the templates engine here)[https://www.npmjs.com/package/mustache]:
@@ -241,7 +246,8 @@ Otherwise, there are some really cool free hosting services, such as [OpenShift]
 [Heroku](https://dashboard.heroku.com/) and more.
 
 ## Useful Links
-* [Mustache](https://www.npmjs.com/package/mustache)
+* [Mustache Template Engine](https://www.npmjs.com/package/mustache)
+* [json-query](https://www.npmjs.com/package/json-query)
 * [Slack Webhooks](https://api.slack.com/incoming-webhooks)
 * [CRON syntax](http://crontab.org/)
 * [Valid timezones](ttps://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/timezone.html)

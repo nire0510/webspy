@@ -2,9 +2,11 @@
 
 const diff = require('deep-diff').diff;
 const fs = require('fs');
+const jq = require('json-query');
 const Mustache = require('mustache');
 const path = require('path');
 const phantom = require('x-ray-phantom');
+const request = require('request');
 const Slack = require('slack-node');
 const xr = require('x-ray')();
 const xp = require('x-ray')().driver(phantom({ webSecurity: false }));
@@ -140,32 +142,56 @@ const Agent = {
         wait = this.wait && this.wait > 0,
         x = wait > 0 ? xp : xr;
 
-      x(this.url, this.selectors)((err, output) => {
-        if (err) {
-          return reject(wait ? done(err) : err);
-        }
+      if (this.json) {
+        let output = {};
 
-        if (wait) {
-          setTimeout(() => {
-            _resolve.call(this);
-          }, this.wait);
-        }
-        else {
-          _resolve.call(this);
-        }
+        request({
+          url: this.url,
+          json: true
+        }, (err, response, body) => {
+          if (err) {
+            return reject(err);
+          }
 
-        function _resolve () {
-          let results = {};
+          debugger
 
-          results.data = output;
-          results.url = self.url;
-          results.selectors = self.selectors;
-          results.timestamp = new Date().valueOf();
-          this.current = results;
+          if (response.statusCode === 200) {
+            Object.keys(this.selectors).forEach(key => {
+              output[key] = jq(this.selectors[key], { data: { root: body } }).value
+            });
 
-          resolve(results);
-        }
-      });
+            _resolve.call(this, output);
+          }
+        });
+      }
+      else {
+        x(this.url, this.selectors)((err, output) => {
+          if (err) {
+            return reject(wait ? done(err) : err);
+          }
+
+          if (wait) {
+            setTimeout(() => {
+              _resolve.call(this, output);
+            }, this.wait);
+          }
+          else {
+            _resolve.call(this, output);
+          }
+        });
+      }
+
+      function _resolve (output) {
+        let results = {};
+
+        results.data = output;
+        results.url = self.url;
+        results.selectors = self.selectors;
+        results.timestamp = new Date().valueOf();
+        this.current = results;
+
+        resolve(results);
+      }
     });
   },
 
