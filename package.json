@@ -1,17 +1,17 @@
 {
   "name": "webspy",
-  "version": "1.3.1",
+  "version": "1.3.5",
   "description": "Get notifications when web page updated",
   "main": "./main.js",
   "dependencies": {
-    "cron": "^1.1.0",
-    "deep-diff": "^0.3.4",
-    "glob": "^7.0.5",
+    "cron": "^1.3.0",
+    "deep-diff": "^0.3.8",
+    "glob": "^7.1.2",
     "json-query": "^2.2.2",
     "mustache": "^2.3.0",
-    "request": "^2.81.0",
+    "request": "^2.83.0",
     "slack-node": "^0.2.0",
-    "x-ray": "^2.3.0",
+    "x-ray": "^2.3.2",
     "x-ray-phantom": "^1.0.1"
   },
   "devDependencies": {},

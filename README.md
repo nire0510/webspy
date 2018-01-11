@@ -2,9 +2,9 @@
 ***My name is Spy. WebSpy.***
 
 ## Description
-**WebSpy** silently sends its agents out there, to the darkest creepiest internet corners,
-to keep an eye and let you know if someone messed with web pages you care for...  
-(OR, to be less dramatic, use **WebSpy** if you want to be notified on web page changes)
+**WebSpy** silently sends its agents out there, to the darkest creepiest corners of the internet,
+to keep an eye and let you know if someone has messed with web pages you care for...  
+(OR, to be less dramatic, use **WebSpy** if you want to be notified when a web page has changed)
 
 ## How To Use WebSpy
 1. Create a new directory for the project. The recommended structure is:  
@@ -68,7 +68,7 @@ module.exports = Agent.extend({
         "footer": "My name is {{Name}}. WebSpy rules!"
     }
   ],
-  // (Optional) time to wait (in milliseconds) before scraping the page. Can be handy when scraping dynamic page (AJAX)
+  // (Optional) time to wait (in milliseconds) before scraping the page. Can be handy when scraping dynamic page. Required phantomjs to be installed:
   wait: 0,
   // (Optional) slack webhook configuration (read here how to create Slack webhooks - https://api.slack.com/incoming-webhooks).
   // If empty, only the JSON result files will be generated and messages will not be send:
@@ -242,7 +242,7 @@ When specifying your cron values you'll need to make sure that your values fall 
 ## Tips
 * WebSpy shines as a productivity tool when it runs constantly. If you have your own
 server, you might want to try [PM2](http://pm2.keymetrics.io/) as your operators process manager.
-Otherwise, there are some really cool free hosting services, such as [OpenShift](https://www.openshift.com/), 
+Otherwise, there are some really cool free hosting services, such as 
 [Heroku](https://dashboard.heroku.com/) and more.
 
 ## Useful Links
@@ -252,5 +252,4 @@ Otherwise, there are some really cool free hosting services, such as [OpenShift]
 * [CRON syntax](http://crontab.org/)
 * [Valid timezones](ttps://www.vmware.com/support/developer/vc-sdk/visdk400pubs/ReferenceGuide/timezone.html)
 * Free node.js hosting services:
-    * [OpenShift](https://www.openshift.com/)
     * [Heroku](https://dashboard.heroku.com/)
